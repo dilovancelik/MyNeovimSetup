@@ -10,7 +10,7 @@ return {
         lazy = false,
         config = function()
             require("mason-lspconfig").setup({
-                ensure_installed = { "lua_ls", "ruff", "pyright",  "tsserver", "rust_analyzer"}
+                ensure_installed = { "lua_ls", "ruff", "pyright",  "tsserver", "rust_analyzer", "ast_grep"}
             })
         end,
     },
@@ -32,7 +32,9 @@ return {
             lspconfig.rust_analyzer.setup({
                 capabilities = capabilities,
             })
-
+            lspconfig.ast_grep.setup({
+                capabilities = capabilities,
+            })
             vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
             vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
             vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, {})
