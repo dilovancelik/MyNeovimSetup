@@ -9,13 +9,19 @@ vim.cmd("set updatetime=1000")
 vim.g.mapleader = " "
  
 -- setup diagnostics
-vim.diagnostic.config({ virtual_text = false })
-vim.api.nvim_create_autocmd({ "CursorHold" }, {
-	callback = function()
-		if vim.lsp.buf.server_ready() then
-			vim.diagnostic.open_float()
-		end
-	end,
+local diag_augroup = vim.api.nvim_create_augroup("MyLspDiagnostics", {})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = diag_augroup,
+  callback = function(args)
+    vim.api.nvim_create_autocmd("CursorHold", {
+      group = diag_augroup,
+      buffer = args.buf,
+      callback = function()
+        vim.diagnostic.open_float()
+      end,
+    })
+  end,
 })
 
 -- set up LSP signs
